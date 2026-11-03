@@ -103,6 +103,26 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 .footer-links{display:flex;gap:18px;flex-wrap:wrap}
 .copyright{border-top:1px solid var(--line);padding-top:16px;margin-top:22px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .wa-float{position:fixed;bottom:20px;right:20px;z-index:30;box-shadow:0 8px 30px #0008}
+
+/* ===== GALERIE PHOTOS ===== */
+.vehicle-image[data-i]{cursor:zoom-in}
+.vehicle .more{margin-top:auto;margin-bottom:8px}
+.vehicle .more + .btn{margin-top:0}
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px}
+.lightbox[hidden]{display:none}
+.lightbox img{max-width:100%;max-height:68vh;border-radius:10px;object-fit:contain}
+.lb-bar{display:flex;align-items:center;gap:16px;color:var(--muted);font-size:13px}
+.lb-close,.lb-nav{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:50%;width:44px;height:44px;font-size:22px}
+.lb-close{top:16px;right:16px}
+.lb-nav{top:50%;transform:translateY(-50%)}
+.lb-nav.prev{left:12px}.lb-nav.next{right:12px}
+.lb-nav:hover,.lb-close:hover{background:var(--btn)}
+
+/* ===== DESCRIPTION ===== */
+.desc{font-size:12px;color:#c5cbd0;margin:0 0 12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lb-desc{max-width:640px;max-height:18vh;overflow:auto;margin:0;text-align:center;color:#c5cbd0;font-size:14px;white-space:pre-line}
+.lb-desc:empty{display:none}
+
 @media(max-width:900px){.links{gap:13px}.inventory,.categories{grid-template-columns:repeat(2,1fr)}.hero{min-height:460px}.about{grid-template-columns:1fr}.about-image{aspect-ratio:16/10;max-height:380px}}
 @media(max-width:650px){
 .nav{min-height:65px}.brand-name{font-size:15px}.brand-mark{width:39px;height:37px}.menu-btn{display:block}
@@ -116,7 +136,8 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 .vehicle-image{height:135px}.vehicle-body{padding:10px}.vehicle h3{font-size:13px}.price{font-size:16px}
 .filters input,.filters select{width:100%;min-width:0}
 .stats{grid-template-columns:1fr}.contact-band{align-items:flex-start;flex-direction:column}
-.wa-float{right:12px;bottom:12px}.brand-row{justify-content:center;font-size:11px}}
+.wa-float{right:12px;bottom:12px}.brand-row{justify-content:center;font-size:11px}
+.lb-nav{width:38px;height:38px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 </head>
@@ -179,30 +200,49 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 </div></footer>
 <a class="btn wa-float" href="https://wa.me/212658745426" target="_blank" rel="noopener" aria-label="Contacter Houssam Motors sur WhatsApp">☏ WhatsApp</a>
 
+<!-- GALERIE PHOTOS -->
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Galerie photos">
+  <button class="lb-close" id="lbClose" aria-label="Fermer">✕</button>
+  <button class="lb-nav prev" id="lbPrev" aria-label="Photo précédente">‹</button>
+  <img id="lbImg" alt="">
+  <button class="lb-nav next" id="lbNext" aria-label="Photo suivante">›</button>
+  <p class="lb-desc" id="lbDesc"></p>
+  <div class="lb-bar"><span id="lbCount"></span><a class="btn small" id="lbWa" href="#" target="_blank" rel="noopener">Demander des informations ↗</a></div>
+</div>
+
 <script>
 /* ====== GOOGLE SHEET = TON STOCK ======
-   Colonnes (ligne 1) : category | name | year | image | km | fuel | price | tag
+   Colonnes (ligne 1) : category | name | year | image | km | fuel | price | tag | images | description
+   image       = photo principale (carte)
+   images      = photos supplémentaires, séparées par |
+   description = petit texte (résumé sur la carte, texte complet dans la galerie)
    Catégories : Voiture, Moto, Jetski, Accessoire
    tag "Vendu" = annonce grisée et placée en dernier */
 const SHEET_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vTSJTVWLnReZfJsIn7_4uRZLDQPLzgsPaL13MgBd4UP1dgsAnKaJ-d-HsVHiblJwA/pub?gid=1289703178&single=true&output=csv";
-const WA="212658745426", KEY="hm_stock_v1";
+const WA="212658745426", KEY="hm_stock_v3";
 const wa=t=>`https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money=n=>new Intl.NumberFormat("fr-MA",{maximumFractionDigits:0}).format(n)+" DH";
 const $=id=>document.getElementById(id);
 const inventory=$("inventory"),searchInput=$("searchInput"),categoryFilter=$("categoryFilter"),sortFilter=$("sortFilter");
 const isSold=v=>/vendu/i.test(v.tag||"");
-let vehicles=[],state="loading";
+let vehicles=[],state="loading",shown=[];
 
-const card=v=>{
+/* Liste des photos d'un véhicule (principale + supplémentaires, sans doublons) */
+const photos=v=>[...new Set([v.image,...(v.images||"").split(/[|\s]+/)].filter(Boolean))];
+
+const card=(v,i)=>{
   const sold=isSold(v);
   const meta=[v.year,v.km,v.fuel].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join("");
   const price=sold?"":Number.isFinite(v.price)?`<div class="price">${money(v.price)}</div>`:`<div class="price ask">Prix sur demande</div>`;
   const tag=v.tag?`<span class="tag">${esc(v.tag)}</span>`:"";
+  const desc=v.description?`<p class="desc">${esc(v.description)}</p>`:"";
   const img=v.image?`<img loading="lazy" decoding="async" src="${esc(v.image)}" alt="${esc(v.name)} ${esc(v.year||"")}" onerror="this.remove()">`:"";
+  const n=photos(v).length;
+  const more=(n>1||v.description)?`<button class="btn small outline more" data-i="${i}">${n>1?`📷 Voir plus de photos (${n})`:"Voir les détails"}</button>`:"";
   const ref=v.name+(v.year?" "+v.year:"");
   const msg=sold?`Bonjour Houssam Motors, je cherche un modèle similaire à ${ref}.`:`Bonjour Houssam Motors, je souhaite des informations sur ${ref}.`;
-  return `<article class="vehicle${sold?" sold":""}"><div class="vehicle-image">${img}${tag}</div><div class="vehicle-body"><h3>${esc(v.name)}</h3>${meta?`<div class="meta">${meta}</div>`:""}${price}<a class="btn small" href="${wa(msg)}" target="_blank" rel="noopener">${sold?"Chercher un modèle similaire":"Demander des informations"} ↗</a></div></article>`;
+  return `<article class="vehicle${sold?" sold":""}"><div class="vehicle-image" data-i="${i}">${img}${tag}</div><div class="vehicle-body"><h3>${esc(v.name)}</h3>${meta?`<div class="meta">${meta}</div>`:""}${desc}${price}${more}<a class="btn small" href="${wa(msg)}" target="_blank" rel="noopener">${sold?"Chercher un modèle similaire":"Demander des informations"} ↗</a></div></article>`;
 };
 
 function render(){
@@ -212,6 +252,7 @@ function render(){
   const dir=sort==="yearDesc"?-1:sort==="yearAsc"?1:0;
   const rows=vehicles.filter(v=>(!cat||v.category.toLowerCase()===cat)&&`${v.name} ${v.category} ${v.year||""}`.toLowerCase().includes(q))
     .sort((a,b)=>(isSold(a)-isSold(b))||dir*((a.year||0)-(b.year||0)));
+  shown=rows;
   inventory.innerHTML=rows.length?rows.map(card).join(""):
     `<div class="empty">Aucune annonce pour le moment dans cette sélection.<br><a class="btn small" href="${wa("Bonjour Houssam Motors, je cherche : "+(categoryFilter.value||q||"un véhicule")+".")}" target="_blank" rel="noopener">Nous demander sur WhatsApp ↗</a></div>`;
 }
@@ -245,7 +286,7 @@ function toVehicles(text){
 
 async function loadSheet(){
   try{
-    const res=await fetch(SHEET_URL);
+    const res=await fetch(SHEET_URL+"&t="+Date.now());
     if(!res.ok)throw new Error("HTTP "+res.status);
     vehicles=toVehicles(await res.text());state="ok";
     try{localStorage.setItem(KEY,JSON.stringify(vehicles))}catch{}
@@ -264,6 +305,46 @@ document.querySelectorAll("[data-cat-link]").forEach(a=>a.addEventListener("clic
 const nav=$("navLinks"),menuBtn=$("menuBtn");
 menuBtn.addEventListener("click",()=>menuBtn.setAttribute("aria-expanded",nav.classList.toggle("open")));
 nav.addEventListener("click",e=>{if(e.target.tagName==="A"){nav.classList.remove("open");menuBtn.setAttribute("aria-expanded","false")}});
+
+/* ====== GALERIE PHOTOS ====== */
+const lightbox=$("lightbox"),lbImg=$("lbImg"),lbCount=$("lbCount"),lbWa=$("lbWa");
+let gal=[],gi=0,galV=null,touchX=0;
+
+function showGal(){
+  lbImg.src=gal[gi];
+  lbImg.alt=galV.name+" photo "+(gi+1);
+  lbCount.textContent=(gi+1)+" / "+gal.length;
+  $("lbDesc").textContent=galV.description||"";
+  lbWa.href=wa("Bonjour Houssam Motors, je souhaite des informations sur "+galV.name+(galV.year?" "+galV.year:"")+".");
+  $("lbPrev").style.display=$("lbNext").style.display=gal.length>1?"":"none";
+}
+function openGal(v){
+  galV=v;gal=photos(v);gi=0;
+  if(!gal.length)return;
+  showGal();lightbox.hidden=false;document.body.style.overflow="hidden";
+}
+function closeGal(){lightbox.hidden=true;document.body.style.overflow=""}
+function step(d){gi=(gi+d+gal.length)%gal.length;showGal()}
+
+inventory.addEventListener("click",e=>{
+  const t=e.target.closest("[data-i]");
+  if(t&&shown[+t.dataset.i])openGal(shown[+t.dataset.i]);
+});
+$("lbClose").addEventListener("click",closeGal);
+$("lbPrev").addEventListener("click",()=>step(-1));
+$("lbNext").addEventListener("click",()=>step(1));
+lightbox.addEventListener("click",e=>{if(e.target===lightbox)closeGal()});
+document.addEventListener("keydown",e=>{
+  if(lightbox.hidden)return;
+  if(e.key==="Escape")closeGal();
+  if(e.key==="ArrowLeft")step(-1);
+  if(e.key==="ArrowRight")step(1);
+});
+lightbox.addEventListener("touchstart",e=>{touchX=e.touches[0].clientX},{passive:true});
+lightbox.addEventListener("touchend",e=>{
+  const dx=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(dx)>50&&gal.length>1)step(dx<0?1:-1);
+});
 
 $("year").textContent=new Date().getFullYear();
 render();
