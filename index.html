@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>try{if(sessionStorage.getItem("hm_splash")||location.hash.startsWith("#v-"))document.documentElement.classList.add("no-splash")}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Houssam Motors | Automotive & Marine</title>
 <meta name="description" content="Houssam Motors — voitures, motos, jetskis, pièces et accessoires au Maroc.">
@@ -166,9 +167,68 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 .stats{grid-template-columns:1fr}.contact-band{align-items:flex-start;flex-direction:column}
 .wa-float{right:12px;bottom:12px}.brand-row{justify-content:center;font-size:11px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* ===== Intro / splash (compatible téléphone) ===== */
+.splash{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;height:100dvh;z-index:100;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#0c0f12;-webkit-tap-highlight-color:transparent;opacity:1;visibility:visible;transition:opacity .6s,visibility .6s;animation:spOut .6s 3.8s forwards}
+.splash.hide{opacity:0;visibility:hidden}
+.no-splash .splash{display:none}
+.splash-inner{text-align:center;padding:20px;width:100%}
+.splash-mark{display:inline-flex;align-items:center;justify-content:center;width:92px;height:82px;border:3px solid var(--orange);color:var(--orange);font-weight:900;font-size:40px;-webkit-transform:skew(-10deg);transform:skew(-10deg);opacity:0;-webkit-animation:spMark 1s cubic-bezier(.2,.8,.2,1) forwards,spGlow 1.4s 1s ease-in-out infinite alternate;animation:spMark 1s cubic-bezier(.2,.8,.2,1) forwards,spGlow 1.4s 1s ease-in-out infinite alternate}
+.splash-name{margin-top:24px;font-weight:900;font-size:clamp(20px,5.5vw,34px);letter-spacing:.2em;opacity:0;-webkit-animation:spRise .7s .7s forwards;animation:spRise .7s .7s forwards}
+.splash-sub{margin-top:8px;font-size:11px;letter-spacing:.4em;color:var(--muted);opacity:0;-webkit-animation:spRise .7s 1s forwards;animation:spRise .7s 1s forwards}
+.splash-bar{width:200px;max-width:70vw;height:3px;margin:28px auto 0;background:#222a31;border-radius:2px;overflow:hidden}
+.splash-bar i{display:block;height:100%;width:100%;background:var(--orange);-webkit-transform:scaleX(0);transform:scaleX(0);-webkit-transform-origin:left;transform-origin:left;-webkit-animation:spFill 2.6s .4s cubic-bezier(.5,0,.2,1) forwards;animation:spFill 2.6s .4s cubic-bezier(.5,0,.2,1) forwards}
+@-webkit-keyframes spMark{from{opacity:0;-webkit-transform:skew(-10deg) scale(.4) rotate(-8deg)}to{opacity:1;-webkit-transform:skew(-10deg) scale(1)}}
+@keyframes spMark{from{opacity:0;transform:skew(-10deg) scale(.4) rotate(-8deg)}to{opacity:1;transform:skew(-10deg) scale(1)}}
+@keyframes spGlow{from{box-shadow:0 0 0 rgba(255,106,0,0)}to{box-shadow:0 0 35px rgba(255,106,0,.55)}}
+@-webkit-keyframes spRise{from{opacity:0;-webkit-transform:translateY(14px)}to{opacity:1;-webkit-transform:none}}
+@keyframes spRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@-webkit-keyframes spFill{to{-webkit-transform:scaleX(1)}}
+@keyframes spFill{to{transform:scaleX(1)}}
+@keyframes spOut{to{opacity:0;visibility:hidden}}
+/* Mode "réduire les animations" (fréquent sur téléphone) : on garde l'intro, sans mouvement */
+@media(prefers-reduced-motion:reduce){
+.splash{transition:opacity .6s,visibility .6s!important}
+.splash-mark{-webkit-animation:spFade .6s forwards!important;animation:spFade .6s forwards!important}
+.splash-name{-webkit-animation:spFade .6s .4s forwards!important;animation:spFade .6s .4s forwards!important}
+.splash-sub{-webkit-animation:spFade .6s .6s forwards!important;animation:spFade .6s .6s forwards!important}
+.splash-bar i{-webkit-animation:spFill 2.6s .4s linear forwards!important;animation:spFill 2.6s .4s linear forwards!important}
+}
+@keyframes spFade{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
+
+<!-- Intro splash -->
+<div class="splash" id="splash" aria-hidden="true">
+  <div class="splash-inner">
+    <div class="splash-mark">HM</div>
+    <div class="splash-name">HOUSSAM MOTORS</div>
+    <div class="splash-sub">AUTOMOTIVE &amp; MARINE</div>
+    <div class="splash-bar"><i></i></div>
+  </div>
+</div>
+<script>
+/* Lancé tout de suite, indépendant du reste du site */
+(function(){
+  var s=document.getElementById("splash");
+  if(!s)return;
+  if(document.documentElement.className.indexOf("no-splash")>-1){s.parentNode.removeChild(s);return}
+  document.body.style.overflow="hidden";
+  var done=false;
+  function end(){
+    if(done)return;done=true;
+    s.className+=" hide";
+    document.body.style.overflow="";
+    try{sessionStorage.setItem("hm_splash","1")}catch(e){}
+    setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},750);
+  }
+  var t=setTimeout(end,3400);
+  s.addEventListener("click",function(){clearTimeout(t);end()});
+  s.addEventListener("touchend",function(){clearTimeout(t);end()},{passive:true});
+})();
+</script>
+
 <header class="topbar"><div class="wrap nav">
 <a class="brand" href="#accueil" aria-label="Houssam Motors accueil"><span class="brand-mark">HM</span><span class="brand-name">HOUSSAM MOTORS<small>AUTOMOTIVE &amp; MARINE</small></span></a>
 <nav class="links" id="navLinks" aria-label="Navigation principale"><a href="#accueil">Accueil</a><a href="#vehicules">Véhicules</a><a href="#categories">Catégories</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></nav>
