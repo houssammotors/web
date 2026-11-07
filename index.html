@@ -70,13 +70,15 @@ section{padding:42px 0}
 .filters select option{background:var(--panel)}
 .vehicle{border:1px solid var(--line);background:linear-gradient(180deg,#151a1f,#0d1013);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 .vehicle-image{height:180px;position:relative;background:#20262b}
+.vehicle-image[data-open]{cursor:pointer}
 .vehicle-image img{width:100%;height:100%;object-fit:cover}
 .tag{position:absolute;left:12px;top:12px;background:var(--btn);color:#fff;font-size:10px;font-weight:900;padding:4px 8px;border-radius:4px;text-transform:uppercase}
 .vehicle.sold .vehicle-image img{filter:grayscale(.85) brightness(.6)}
 .vehicle.sold .tag{background:#4a525a}
 .vehicle-body{padding:14px;display:flex;flex-direction:column;flex:1}
 .vehicle h3{font-size:15px;margin:0 0 6px}
-.meta{font-size:11px;color:var(--muted);display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.meta{font-size:11px;color:var(--muted);display:flex;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.desc{font-size:12px;color:var(--muted);margin:0 0 12px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .price{color:var(--orange);font-size:19px;font-weight:900;margin:0 0 14px}
 .price.ask{color:var(--muted);font-size:13px;font-weight:600}
 .vehicle .btn{width:100%;margin-top:auto}
@@ -104,24 +106,44 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 .copyright{border-top:1px solid var(--line);padding-top:16px;margin-top:22px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .wa-float{position:fixed;bottom:20px;right:20px;z-index:30;box-shadow:0 8px 30px #0008}
 
-/* ===== GALERIE PHOTOS ===== */
-.vehicle-image[data-i]{cursor:zoom-in}
-.vehicle .more{margin-top:auto;margin-bottom:8px}
-.vehicle .more + .btn{margin-top:0}
-.lightbox{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px}
-.lightbox[hidden]{display:none}
-.lightbox img{max-width:100%;max-height:68vh;border-radius:10px;object-fit:contain}
-.lb-bar{display:flex;align-items:center;gap:16px;color:var(--muted);font-size:13px}
-.lb-close,.lb-nav{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:50%;width:44px;height:44px;font-size:22px}
-.lb-close{top:16px;right:16px}
-.lb-nav{top:50%;transform:translateY(-50%)}
-.lb-nav.prev{left:12px}.lb-nav.next{right:12px}
-.lb-nav:hover,.lb-close:hover{background:var(--btn)}
+/* ===== Bouton ⋮ partager ===== */
+.share-btn{position:absolute;top:10px;right:10px;z-index:5;width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.share-btn:hover,.share-btn:focus-visible{background:rgba(0,0,0,.85)}
+.share-btn svg{width:20px;height:20px;fill:currentColor;pointer-events:none}
+.share-menu{position:fixed;z-index:60;display:none;min-width:210px;padding:6px;border-radius:12px;background:var(--panel);border:1px solid var(--line);box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.share-menu.open{display:block}
+.share-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border:0;border-radius:8px;background:none;color:var(--text);text-align:left;font-size:14px}
+.share-menu button:hover,.share-menu button:focus-visible{background:rgba(255,255,255,.1)}
+.share-toast{position:fixed;left:50%;bottom:24px;z-index:70;transform:translateX(-50%) translateY(20px);padding:10px 18px;border-radius:999px;background:#111;border:1px solid var(--line);color:#fff;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:92vw;text-align:center}
+.share-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.vehicle.share-highlight{outline:3px solid var(--orange);outline-offset:3px}
 
-/* ===== DESCRIPTION ===== */
-.desc{font-size:12px;color:#c5cbd0;margin:0 0 12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.lb-desc{max-width:640px;max-height:18vh;overflow:auto;margin:0;text-align:center;color:#c5cbd0;font-size:14px;white-space:pre-line}
-.lb-desc:empty{display:none}
+/* ===== Bouton ❤️ J'aime ===== */
+.like-btn{position:absolute;right:10px;bottom:10px;z-index:5;width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:transform .15s,color .15s}
+.like-btn:hover,.like-btn:focus-visible{background:rgba(0,0,0,.85)}
+.like-btn:active{transform:scale(.88)}
+.like-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;pointer-events:none}
+.like-btn.on{color:#ff3b5c}
+.like-btn.on svg{fill:currentColor}
+
+/* ===== Bouton photos + galerie plein écran ===== */
+.more-photos{position:absolute;left:10px;bottom:10px;z-index:4;padding:7px 11px;border:0;border-radius:999px;background:rgba(0,0,0,.7);color:#fff;font-size:12px;font-weight:700}
+.more-photos:hover{background:rgba(0,0,0,.9)}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.95);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:64px 16px 24px;overflow-y:auto}
+.lb[hidden]{display:none}
+.lb-close{position:fixed;top:12px;right:12px;z-index:52;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:20px}
+.lb-close:hover{background:rgba(255,255,255,.3)}
+.lb-share{position:fixed;top:12px;right:60px;z-index:52;background:rgba(255,255,255,.15)}
+.like-btn.lb-like{position:fixed;top:12px;bottom:auto;right:108px;z-index:52;background:rgba(255,255,255,.15)}
+.lb-stage{position:relative;width:min(960px,100%);display:flex;align-items:center;justify-content:center;min-height:120px}
+.lb-stage img{max-width:100%;max-height:62vh;object-fit:contain;border-radius:8px;touch-action:pan-y;user-select:none}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:26px;line-height:1}
+.lb-nav:hover{background:rgba(0,0,0,.9)}
+.lb-nav.prev{left:8px}.lb-nav.next{right:8px}
+.lb-info{width:min(960px,100%);margin-top:14px}
+.lb-count{color:var(--muted);font-size:13px}
+.lb-info h3{margin:4px 0 8px;font-size:20px}
+.lb-info p{margin:0;color:#d5d9dc;font-size:14px;white-space:pre-line}
 
 @media(max-width:900px){.links{gap:13px}.inventory,.categories{grid-template-columns:repeat(2,1fr)}.hero{min-height:460px}.about{grid-template-columns:1fr}.about-image{aspect-ratio:16/10;max-height:380px}}
 @media(max-width:650px){
@@ -134,10 +156,15 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 .trust{gap:10px;flex-direction:column;margin-top:25px}
 .categories,.inventory{gap:10px}.category{min-height:150px}.category-content{padding:12px}.category h3{font-size:14px}.category p{font-size:10px}
 .vehicle-image{height:135px}.vehicle-body{padding:10px}.vehicle h3{font-size:13px}.price{font-size:16px}
+.share-btn{width:34px;height:34px;top:8px;right:8px}.share-btn svg{width:18px;height:18px}
+.like-btn{width:34px;height:34px;right:8px;bottom:8px}.like-btn svg{width:18px;height:18px}
+.more-photos{left:6px;bottom:6px;padding:5px 8px;font-size:10px}
+.lb{padding-top:60px}.lb-stage img{max-height:50vh}
+.lb-share{width:40px;height:40px;top:12px;right:60px}
+.like-btn.lb-like{width:40px;height:40px;top:12px;right:108px}
 .filters input,.filters select{width:100%;min-width:0}
 .stats{grid-template-columns:1fr}.contact-band{align-items:flex-start;flex-direction:column}
-.wa-float{right:12px;bottom:12px}.brand-row{justify-content:center;font-size:11px}
-.lb-nav{width:38px;height:38px}}
+.wa-float{right:12px;bottom:12px}.brand-row{justify-content:center;font-size:11px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 </head>
@@ -200,62 +227,123 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 </div></footer>
 <a class="btn wa-float" href="https://wa.me/212658745426" target="_blank" rel="noopener" aria-label="Contacter Houssam Motors sur WhatsApp">☏ WhatsApp</a>
 
-<!-- GALERIE PHOTOS -->
-<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Galerie photos">
-  <button class="lb-close" id="lbClose" aria-label="Fermer">✕</button>
-  <button class="lb-nav prev" id="lbPrev" aria-label="Photo précédente">‹</button>
-  <img id="lbImg" alt="">
-  <button class="lb-nav next" id="lbNext" aria-label="Photo suivante">›</button>
-  <p class="lb-desc" id="lbDesc"></p>
-  <div class="lb-bar"><span id="lbCount"></span><a class="btn small" id="lbWa" href="#" target="_blank" rel="noopener">Demander des informations ↗</a></div>
+<!-- Galerie plein écran -->
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Galerie photos">
+<button class="lb-close" id="lbClose" type="button" aria-label="Fermer">✕</button>
+<button class="share-btn lb-share" id="lbShare" type="button" data-share="" aria-label="Partager cette annonce" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+<button class="like-btn lb-like" id="lbLike" type="button" data-like="" aria-pressed="false" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+<div class="lb-stage">
+<button class="lb-nav prev" id="lbPrev" type="button" aria-label="Photo précédente">‹</button>
+<img id="lbImg" alt="">
+<button class="lb-nav next" id="lbNext" type="button" aria-label="Photo suivante">›</button>
+</div>
+<div class="lb-info"><div class="lb-count" id="lbCount"></div><h3 id="lbTitle"></h3><p id="lbDesc"></p></div>
 </div>
 
 <script>
 /* ====== GOOGLE SHEET = TON STOCK ======
    Colonnes (ligne 1) : category | name | year | image | km | fuel | price | tag | images | description
-   image       = photo principale (carte)
-   images      = photos supplémentaires, séparées par |
-   description = petit texte (résumé sur la carte, texte complet dans la galerie)
    Catégories : Voiture, Moto, Jetski, Accessoire
-   tag "Vendu" = annonce grisée et placée en dernier */
+   tag "Vendu" = annonce grisée et placée en dernier
+   images = autres photos séparées par |   (ex : https://a.jpg|https://b.jpg) */
 const SHEET_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vTSJTVWLnReZfJsIn7_4uRZLDQPLzgsPaL13MgBd4UP1dgsAnKaJ-d-HsVHiblJwA/pub?gid=1289703178&single=true&output=csv";
-const WA="212658745426", KEY="hm_stock_v3";
+const WA="212658745426", KEY="hm_stock_v4", LIKES_KEY="hm_likes", SITE_NAME="Houssam Motors";
 const wa=t=>`https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money=n=>new Intl.NumberFormat("fr-MA",{maximumFractionDigits:0}).format(n)+" DH";
 const $=id=>document.getElementById(id);
 const inventory=$("inventory"),searchInput=$("searchInput"),categoryFilter=$("categoryFilter"),sortFilter=$("sortFilter");
 const isSold=v=>/vendu/i.test(v.tag||"");
-let vehicles=[],state="loading",shown=[];
+let vehicles=[],state="loading",loaded=false;
+let pending=location.hash.startsWith("#v-")?location.hash.slice(3):"";
 
-/* Liste des photos d'un véhicule (principale + supplémentaires, sans doublons) */
-const photos=v=>[...new Set([v.image,...(v.images||"").split(/[|\s]+/)].filter(Boolean))];
+const DOTS='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
+const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+const slugify=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60)||"annonce";
+const titleOf=v=>v.name+(v.year?" "+v.year:"");
 
-const card=(v,i)=>{
+/* ===== Favoris ❤️ (enregistrés dans le navigateur du visiteur) ===== */
+let likes=new Set();
+try{const l=JSON.parse(localStorage.getItem(LIKES_KEY));if(Array.isArray(l))likes=new Set(l)}catch{}
+function syncLikes(){
+  document.querySelectorAll("[data-like]").forEach(b=>{
+    const on=likes.has(b.dataset.like);
+    b.classList.toggle("on",on);
+    b.setAttribute("aria-pressed",on?"true":"false");
+    b.setAttribute("aria-label",on?"Retirer des favoris":"Ajouter aux favoris");
+  });
+}
+function toggleLike(slug){
+  if(!slug)return;
+  const on=!likes.has(slug);
+  if(on)likes.add(slug);else likes.delete(slug);
+  try{localStorage.setItem(LIKES_KEY,JSON.stringify([...likes]))}catch{}
+  syncLikes();
+  toast(on?"Ajouté à tes favoris ❤️":"Retiré des favoris");
+}
+
+/* Donne à chaque annonce un identifiant (pour le lien partagé) et la liste de ses photos */
+function prepare(list){
+  const used={};
+  list.forEach(v=>{
+    let s=slugify(titleOf(v));
+    used[s]=(used[s]||0)+1;
+    if(used[s]>1)s+="-"+used[s];
+    v.slug=s;
+    const extra=String(v.images||"").split("|").map(x=>x.trim()).filter(Boolean);
+    v.photos=[...new Set([v.image,...extra].filter(Boolean))];
+  });
+  return list;
+}
+
+const card=v=>{
   const sold=isSold(v);
   const meta=[v.year,v.km,v.fuel].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join("");
   const price=sold?"":Number.isFinite(v.price)?`<div class="price">${money(v.price)}</div>`:`<div class="price ask">Prix sur demande</div>`;
   const tag=v.tag?`<span class="tag">${esc(v.tag)}</span>`:"";
-  const desc=v.description?`<p class="desc">${esc(v.description)}</p>`:"";
   const img=v.image?`<img loading="lazy" decoding="async" src="${esc(v.image)}" alt="${esc(v.name)} ${esc(v.year||"")}" onerror="this.remove()">`:"";
-  const n=photos(v).length;
-  const more=(n>1||v.description)?`<button class="btn small outline more" data-i="${i}">${n>1?`📷 Voir plus de photos (${n})`:"Voir les détails"}</button>`:"";
-  const ref=v.name+(v.year?" "+v.year:"");
+  const more=v.photos.length>1?`<button type="button" class="more-photos" data-open="${esc(v.slug)}">📷 Voir plus de photos (${v.photos.length})</button>`:"";
+  const open=v.photos.length?` data-open="${esc(v.slug)}"`:"";
+  const desc=v.description?`<p class="desc">${esc(v.description)}</p>`:"";
+  const ref=titleOf(v);
+  const liked=likes.has(v.slug);
   const msg=sold?`Bonjour Houssam Motors, je cherche un modèle similaire à ${ref}.`:`Bonjour Houssam Motors, je souhaite des informations sur ${ref}.`;
-  return `<article class="vehicle${sold?" sold":""}"><div class="vehicle-image" data-i="${i}">${img}${tag}</div><div class="vehicle-body"><h3>${esc(v.name)}</h3>${meta?`<div class="meta">${meta}</div>`:""}${desc}${price}${more}<a class="btn small" href="${wa(msg)}" target="_blank" rel="noopener">${sold?"Chercher un modèle similaire":"Demander des informations"} ↗</a></div></article>`;
+  return `<article class="vehicle${sold?" sold":""}" id="v-${esc(v.slug)}"><div class="vehicle-image"${open}>${img}${tag}<button type="button" class="share-btn" data-share="${esc(v.slug)}" aria-label="Partager ${esc(ref)}" aria-haspopup="menu" aria-expanded="false">${DOTS}</button><button type="button" class="like-btn${liked?" on":""}" data-like="${esc(v.slug)}" aria-pressed="${liked}" aria-label="${liked?"Retirer des favoris":"Ajouter aux favoris"}">${HEART}</button>${more}</div><div class="vehicle-body"><h3>${esc(v.name)}</h3>${meta?`<div class="meta">${meta}</div>`:""}${desc}${price}<a class="btn small" href="${wa(msg)}" target="_blank" rel="noopener">${sold?"Chercher un modèle similaire":"Demander des informations"} ↗</a></div></article>`;
 };
 
 function render(){
   if(state==="loading"){inventory.innerHTML=`<div class="empty">Chargement des annonces…</div>`;return}
   if(state==="error"){inventory.innerHTML=`<div class="empty">Impossible de charger les annonces pour le moment.<br><a class="btn small" href="${wa("Bonjour Houssam Motors, je souhaite voir vos annonces.")}" target="_blank" rel="noopener">Nous contacter sur WhatsApp ↗</a></div>`;return}
+  closeMenu();
   const q=searchInput.value.trim().toLowerCase(),cat=categoryFilter.value.toLowerCase(),sort=sortFilter.value;
   const dir=sort==="yearDesc"?-1:sort==="yearAsc"?1:0;
   const rows=vehicles.filter(v=>(!cat||v.category.toLowerCase()===cat)&&`${v.name} ${v.category} ${v.year||""}`.toLowerCase().includes(q))
     .sort((a,b)=>(isSold(a)-isSold(b))||dir*((a.year||0)-(b.year||0)));
-  shown=rows;
   inventory.innerHTML=rows.length?rows.map(card).join(""):
     `<div class="empty">Aucune annonce pour le moment dans cette sélection.<br><a class="btn small" href="${wa("Bonjour Houssam Motors, je cherche : "+(categoryFilter.value||q||"un véhicule")+".")}" target="_blank" rel="noopener">Nous demander sur WhatsApp ↗</a></div>`;
+  goPending();
 }
+
+/* ===== Arrivée par un lien partagé : aller à l'annonce ===== */
+function goPending(){
+  if(!pending||state!=="ok")return;
+  const el=$("v-"+pending);
+  if(el){
+    setTimeout(()=>{
+      el.scrollIntoView({block:"center"});
+      el.classList.add("share-highlight");
+      setTimeout(()=>el.classList.remove("share-highlight"),4000);
+    },200);
+    if(loaded)pending="";
+  }else if(loaded)pending="";
+}
+["wheel","touchstart"].forEach(ev=>window.addEventListener(ev,()=>{pending=""},{passive:true,once:true}));
+window.addEventListener("hashchange",()=>{
+  if(!location.hash.startsWith("#v-"))return;
+  pending=location.hash.slice(3);
+  if($("v-"+pending))goPending();
+  else{categoryFilter.value="";searchInput.value="";render()}
+});
 
 function parseCSV(text){
   const rows=[];let row=[],cell="",q=false;
@@ -286,16 +374,136 @@ function toVehicles(text){
 
 async function loadSheet(){
   try{
-    const res=await fetch(SHEET_URL+"&t="+Date.now());
+    const res=await fetch(SHEET_URL);
     if(!res.ok)throw new Error("HTTP "+res.status);
-    vehicles=toVehicles(await res.text());state="ok";
+    vehicles=prepare(toVehicles(await res.text()));state="ok";
     try{localStorage.setItem(KEY,JSON.stringify(vehicles))}catch{}
   }catch(e){console.error("Erreur Google Sheet :",e);if(state!=="ok")state="error"}
+  loaded=true;
   render();
 }
 
-try{const c=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(c)&&c.length){vehicles=c;state="ok"}}catch{}
+try{const c=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(c)&&c.length){vehicles=prepare(c);state="ok"}}catch{}
 
+/* ===== Galerie plein écran ===== */
+const lb=$("lb"),lbImg=$("lbImg"),lbCount=$("lbCount"),lbTitle=$("lbTitle"),lbDesc=$("lbDesc"),lbPrev=$("lbPrev"),lbNext=$("lbNext"),lbShare=$("lbShare"),lbLike=$("lbLike");
+let lbV=null,lbI=0,lastFocus=null;
+function showPhoto(){
+  const n=lbV.photos.length;
+  lbImg.style.display=n?"":"none";
+  if(n){lbImg.src=lbV.photos[lbI];lbImg.alt=titleOf(lbV)+" – photo "+(lbI+1)}
+  lbCount.textContent=n>1?`${lbI+1} / ${n}`:"";
+  lbPrev.style.display=lbNext.style.display=n>1?"":"none";
+}
+function openLb(slug,i){
+  const v=vehicles.find(x=>x.slug===slug);if(!v)return;
+  lbV=v;lbI=i||0;lastFocus=document.activeElement;
+  lbTitle.textContent=titleOf(v);
+  lbDesc.textContent=v.description||"";
+  lbShare.dataset.share=v.slug;
+  lbLike.dataset.like=v.slug;
+  syncLikes();
+  showPhoto();
+  lb.hidden=false;document.body.style.overflow="hidden";
+  $("lbClose").focus();
+}
+function closeLb(){
+  if(lb.hidden)return;
+  closeMenu();lb.hidden=true;document.body.style.overflow="";lbImg.removeAttribute("src");
+  if(lastFocus&&lastFocus.focus)lastFocus.focus();
+}
+function step(d){const n=lbV.photos.length;if(n<2)return;lbI=(lbI+d+n)%n;showPhoto()}
+lbPrev.addEventListener("click",()=>step(-1));
+lbNext.addEventListener("click",()=>step(1));
+$("lbClose").addEventListener("click",closeLb);
+lb.addEventListener("click",e=>{if(e.target===lb||e.target.classList.contains("lb-stage"))closeLb()});
+let tx=null;
+lbImg.addEventListener("touchstart",e=>{tx=e.touches[0].clientX},{passive:true});
+lbImg.addEventListener("touchend",e=>{
+  if(tx===null)return;
+  const dx=e.changedTouches[0].clientX-tx;tx=null;
+  if(Math.abs(dx)>50)step(dx<0?1:-1);
+},{passive:true});
+inventory.addEventListener("click",e=>{
+  if(e.target.closest("[data-share],[data-like]"))return;
+  const o=e.target.closest("[data-open]");
+  if(o)openLb(o.dataset.open,0);
+});
+
+/* ===== Menu de partage ⋮ ===== */
+const menu=document.createElement("div");
+menu.className="share-menu";menu.setAttribute("role","menu");
+menu.innerHTML=(navigator.share?'<button type="button" role="menuitem" data-act="native">📤 Partager…</button>':'')+
+ '<button type="button" role="menuitem" data-act="whatsapp">💬 WhatsApp</button>'+
+ '<button type="button" role="menuitem" data-act="instagram">📸 Instagram</button>'+
+ '<button type="button" role="menuitem" data-act="copy">🔗 Copier le lien</button>';
+const toastEl=document.createElement("div");
+toastEl.className="share-toast";toastEl.setAttribute("role","status");
+document.body.append(menu,toastEl);
+let curBtn=null,toastTimer;
+
+function toast(msg){
+  toastEl.textContent=msg;toastEl.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove("show"),2600);
+}
+function closeMenu(){
+  if(!curBtn)return;
+  curBtn.setAttribute("aria-expanded","false");curBtn=null;menu.classList.remove("open");
+}
+function openMenu(btn){
+  if(curBtn)curBtn.setAttribute("aria-expanded","false");
+  curBtn=btn;btn.setAttribute("aria-expanded","true");menu.classList.add("open");
+  const r=btn.getBoundingClientRect(),w=menu.offsetWidth,h=menu.offsetHeight;
+  menu.style.left=Math.min(Math.max(8,r.right-w),innerWidth-w-8)+"px";
+  let top=r.bottom+6;if(top+h>innerHeight-8)top=Math.max(8,r.top-h-6);
+  menu.style.top=top+"px";
+}
+function copyText(t){
+  if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(t).then(()=>true,()=>false);
+  return new Promise(res=>{
+    const ta=document.createElement("textarea");ta.value=t;ta.style.cssText="position:fixed;opacity:0";
+    document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,t.length);
+    let ok=false;try{ok=document.execCommand("copy")}catch{}
+    ta.remove();res(ok);
+  });
+}
+function doShare(act){
+  const slug=curBtn&&curBtn.dataset.share;
+  const v=vehicles.find(x=>x.slug===slug);
+  closeMenu();
+  if(!v)return;
+  const title=titleOf(v),url=location.href.split("#")[0]+"#v-"+v.slug;
+  const text="Regarde cette annonce chez "+SITE_NAME+" : "+title;
+  if(act==="native"){try{navigator.share({title,text,url}).catch(()=>{})}catch{}}
+  else if(act==="whatsapp")window.open("https://wa.me/?text="+encodeURIComponent(text+"\n"+url),"_blank","noopener");
+  else if(act==="instagram"){
+    /* Instagram n'a pas de lien de partage pour les sites : on copie le lien puis on ouvre Instagram */
+    const p=copyText(url);
+    window.open("https://www.instagram.com/direct/inbox/","_blank","noopener");
+    p.then(ok=>toast(ok?"Lien copié ✅ Colle-le dans Instagram":"Copie impossible : utilise « Copier le lien »"));
+  }
+  else if(act==="copy")copyText(url).then(ok=>toast(ok?"Lien copié ✅":"Impossible de copier le lien"));
+}
+document.addEventListener("click",e=>{
+  const sb=e.target.closest("[data-share]");
+  if(sb){e.preventDefault();if(curBtn===sb)closeMenu();else openMenu(sb);return}
+  const lk=e.target.closest("[data-like]");
+  if(lk){e.preventDefault();closeMenu();toggleLike(lk.dataset.like);return}
+  const it=e.target.closest(".share-menu [data-act]");
+  if(it){doShare(it.dataset.act);return}
+  closeMenu();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    if(curBtn){const b=curBtn;closeMenu();b.focus()}
+    else closeLb();
+  }else if(!lb.hidden&&e.key==="ArrowLeft")step(-1);
+  else if(!lb.hidden&&e.key==="ArrowRight")step(1);
+});
+window.addEventListener("scroll",closeMenu,{passive:true});
+window.addEventListener("resize",closeMenu);
+
+/* ===== Filtres et menu ===== */
 let timer;
 searchInput.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(render,150)});
 categoryFilter.addEventListener("change",render);
@@ -305,46 +513,6 @@ document.querySelectorAll("[data-cat-link]").forEach(a=>a.addEventListener("clic
 const nav=$("navLinks"),menuBtn=$("menuBtn");
 menuBtn.addEventListener("click",()=>menuBtn.setAttribute("aria-expanded",nav.classList.toggle("open")));
 nav.addEventListener("click",e=>{if(e.target.tagName==="A"){nav.classList.remove("open");menuBtn.setAttribute("aria-expanded","false")}});
-
-/* ====== GALERIE PHOTOS ====== */
-const lightbox=$("lightbox"),lbImg=$("lbImg"),lbCount=$("lbCount"),lbWa=$("lbWa");
-let gal=[],gi=0,galV=null,touchX=0;
-
-function showGal(){
-  lbImg.src=gal[gi];
-  lbImg.alt=galV.name+" photo "+(gi+1);
-  lbCount.textContent=(gi+1)+" / "+gal.length;
-  $("lbDesc").textContent=galV.description||"";
-  lbWa.href=wa("Bonjour Houssam Motors, je souhaite des informations sur "+galV.name+(galV.year?" "+galV.year:"")+".");
-  $("lbPrev").style.display=$("lbNext").style.display=gal.length>1?"":"none";
-}
-function openGal(v){
-  galV=v;gal=photos(v);gi=0;
-  if(!gal.length)return;
-  showGal();lightbox.hidden=false;document.body.style.overflow="hidden";
-}
-function closeGal(){lightbox.hidden=true;document.body.style.overflow=""}
-function step(d){gi=(gi+d+gal.length)%gal.length;showGal()}
-
-inventory.addEventListener("click",e=>{
-  const t=e.target.closest("[data-i]");
-  if(t&&shown[+t.dataset.i])openGal(shown[+t.dataset.i]);
-});
-$("lbClose").addEventListener("click",closeGal);
-$("lbPrev").addEventListener("click",()=>step(-1));
-$("lbNext").addEventListener("click",()=>step(1));
-lightbox.addEventListener("click",e=>{if(e.target===lightbox)closeGal()});
-document.addEventListener("keydown",e=>{
-  if(lightbox.hidden)return;
-  if(e.key==="Escape")closeGal();
-  if(e.key==="ArrowLeft")step(-1);
-  if(e.key==="ArrowRight")step(1);
-});
-lightbox.addEventListener("touchstart",e=>{touchX=e.touches[0].clientX},{passive:true});
-lightbox.addEventListener("touchend",e=>{
-  const dx=e.changedTouches[0].clientX-touchX;
-  if(Math.abs(dx)>50&&gal.length>1)step(dx<0?1:-1);
-});
 
 $("year").textContent=new Date().getFullYear();
 render();
