@@ -119,12 +119,12 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 .share-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .vehicle.share-highlight{outline:3px solid var(--orange);outline-offset:3px}
 
-/* ===== Bouton ❤️ J'aime ===== */
+/* ===== Bouton Favoris (marque-page style Instagram) ===== */
 .like-btn{position:absolute;right:10px;bottom:10px;z-index:5;width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:transform .15s,color .15s}
 .like-btn:hover,.like-btn:focus-visible{background:rgba(0,0,0,.85)}
 .like-btn:active{transform:scale(.88)}
-.like-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;pointer-events:none}
-.like-btn.on{color:#ff3b5c}
+.like-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;pointer-events:none}
+.like-btn.on{color:#fff}
 .like-btn.on svg{fill:currentColor}
 
 /* ===== Bouton photos + galerie plein écran ===== */
@@ -145,6 +145,10 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 .lb-count{color:var(--muted);font-size:13px}
 .lb-info h3{margin:4px 0 8px;font-size:20px}
 .lb-info p{margin:0;color:#d5d9dc;font-size:14px;white-space:pre-line}
+.lb-actions{width:min(960px,100%);display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.lb-actions .btn{flex-direction:column;gap:2px;padding:12px 8px;border-radius:10px;font-size:14px;line-height:1.25;text-align:center}
+.lb-actions .btn small{font-size:12px;font-weight:600;opacity:.9;letter-spacing:.02em}
+.lb-actions .btn.wa{background:#1a9b4b;border-color:#1a9b4b}
 
 @media(max-width:900px){.links{gap:13px}.inventory,.categories{grid-template-columns:repeat(2,1fr)}.hero{min-height:460px}.about{grid-template-columns:1fr}.about-image{aspect-ratio:16/10;max-height:380px}}
 @media(max-width:650px){
@@ -186,6 +190,7 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 @-webkit-keyframes spFill{to{-webkit-transform:scaleX(1)}}
 @keyframes spFill{to{transform:scaleX(1)}}
 @keyframes spOut{to{opacity:0;visibility:hidden}}
+@keyframes spFade{from{opacity:0}to{opacity:1}}
 /* Mode "réduire les animations" (fréquent sur téléphone) : on garde l'intro, sans mouvement */
 @media(prefers-reduced-motion:reduce){
 .splash{transition:opacity .6s,visibility .6s!important}
@@ -194,7 +199,6 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 .splash-sub{-webkit-animation:spFade .6s .6s forwards!important;animation:spFade .6s .6s forwards!important}
 .splash-bar i{-webkit-animation:spFill 2.6s .4s linear forwards!important;animation:spFill 2.6s .4s linear forwards!important}
 }
-@keyframes spFade{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
@@ -246,14 +250,16 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 <div class="trust"><span>Véhicules sélectionnés</span><span>Conseils personnalisés</span><span>Service au Maroc</span></div>
 </div></div></section>
 
+
 <section id="categories"><div class="wrap">
 <div class="section-head"><div class="eyebrow">Explorez notre univers</div><h2>Nos <span>catégories</span></h2><p>Une seule adresse pour vos passions mécaniques.</p></div>
 <div class="categories">
-<a class="category" href="#vehicules" data-cat-link="Voiture"><img loading="lazy" decoding="async" width="600" height="400" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=70" alt="Voiture sportive"><div class="category-content"><h3>Voitures</h3><p>Berlines, SUV, sportives, 4x4</p><span class="arrow">↗</span></div></a>
-<a class="category" href="#vehicules" data-cat-link="Moto"><img loading="lazy" decoding="async" width="600" height="400" src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=600&q=70" alt="Moto sportive"><div class="category-content"><h3>Motos</h3><p>Sport, trail, roadster, scooter</p><span class="arrow">↗</span></div></a>
-<a class="category" href="#vehicules" data-cat-link="Jetski"><img loading="lazy" decoding="async" width="600" height="400" src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=600&q=70" alt="Jetski sur la mer"><div class="category-content"><h3>Jetskis</h3><p>Loisirs et performance</p><span class="arrow">↗</span></div></a>
-<a class="category" href="#vehicules" data-cat-link="Accessoire"><img loading="lazy" decoding="async" width="600" height="400" src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=70" alt="Équipement moto"><div class="category-content"><h3>Pièces &amp; accessoires</h3><p>Équipez votre machine</p><span class="arrow">↗</span></div></a>
+<a class="category" href="#vehicules" data-cat-link="Voiture"><img loading="lazy" decoding="async" width="600" height="400" src="https://i.postimg.cc/C5HkYCVc/IMG-4522.jpg" alt="Voiture sportive"><div class="category-content"><h3>Voitures</h3><p>Berlines, SUV, sportives, 4x4</p><span class="arrow">↗</span></div></a>
+<a class="category" href="#vehicules" data-cat-link="Moto"><img loading="lazy" decoding="async" width="600" height="400" src="https://i.postimg.cc/4yByBWGY/IMG-4523.jpg" alt="Moto sportive"><div class="category-content"><h3>Motos</h3><p>Sport, trail, roadster, scooter</p><span class="arrow">↗</span></div></a>
+<a class="category" href="#vehicules" data-cat-link="Jetski"><img loading="lazy" decoding="async" width="600" height="400" src="https://i.postimg.cc/sgSy2TLX/IMG-4524.jpg" alt="Jetski sur la mer"><div class="category-content"><h3>Jetskis</h3><p>Loisirs et performance</p><span class="arrow">↗</span></div></a>
+<a class="category" href="#vehicules" data-cat-link="Accessoire"><img loading="lazy" decoding="async" width="600" height="400" src="https://i.postimg.cc/yxqt2KVL/IMG-4572.jpg" alt="Équipement moto"><div class="category-content"><h3>Pièces &amp; accessoires</h3><p>Équipez votre machine</p><span class="arrow">↗</span></div></a>
 </div></div></section>
+
 
 <section id="vehicules"><div class="wrap">
 <div class="section-head"><div class="eyebrow">Sélection du moment</div><h2>Nos véhicules <span>en vedette</span></h2><p>Contactez-nous sur WhatsApp pour les détails d'une annonce.</p></div>
@@ -291,13 +297,17 @@ footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0 20px;colo
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Galerie photos">
 <button class="lb-close" id="lbClose" type="button" aria-label="Fermer">✕</button>
 <button class="share-btn lb-share" id="lbShare" type="button" data-share="" aria-label="Partager cette annonce" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
-<button class="like-btn lb-like" id="lbLike" type="button" data-like="" aria-pressed="false" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+<button class="like-btn lb-like" id="lbLike" type="button" data-like="" aria-pressed="false" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="20 21 12 13.44 4 21 4 3 20 3 20 21"/></svg></button>
 <div class="lb-stage">
 <button class="lb-nav prev" id="lbPrev" type="button" aria-label="Photo précédente">‹</button>
 <img id="lbImg" alt="">
 <button class="lb-nav next" id="lbNext" type="button" aria-label="Photo suivante">›</button>
 </div>
 <div class="lb-info"><div class="lb-count" id="lbCount"></div><h3 id="lbTitle"></h3><p id="lbDesc"></p></div>
+<div class="lb-actions">
+<a class="btn call" href="tel:+212658745426"><span>📞 Appeler</span><small>06 58 74 54 26</small></a>
+<a class="btn wa" id="lbWa" href="https://wa.me/212658745426" target="_blank" rel="noopener"><span>💬 Message WhatsApp</span><small>Écrire maintenant</small></a>
+</div>
 </div>
 
 <script>
@@ -318,11 +328,11 @@ let vehicles=[],state="loading",loaded=false;
 let pending=location.hash.startsWith("#v-")?location.hash.slice(3):"";
 
 const DOTS='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
-const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="20 21 12 13.44 4 21 4 3 20 3 20 21"/></svg>';
 const slugify=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60)||"annonce";
 const titleOf=v=>v.name+(v.year?" "+v.year:"");
 
-/* ===== Favoris ❤️ (enregistrés dans le navigateur du visiteur) ===== */
+/* ===== Favoris (enregistrés dans le navigateur du visiteur) ===== */
 let likes=new Set();
 try{const l=JSON.parse(localStorage.getItem(LIKES_KEY));if(Array.isArray(l))likes=new Set(l)}catch{}
 function syncLikes(){
@@ -339,7 +349,7 @@ function toggleLike(slug){
   if(on)likes.add(slug);else likes.delete(slug);
   try{localStorage.setItem(LIKES_KEY,JSON.stringify([...likes]))}catch{}
   syncLikes();
-  toast(on?"Ajouté à tes favoris ❤️":"Retiré des favoris");
+  toast(on?"Enregistré dans tes favoris":"Retiré des favoris");
 }
 
 /* Donne à chaque annonce un identifiant (pour le lien partagé) et la liste de ses photos */
@@ -460,6 +470,7 @@ function openLb(slug,i){
   lbV=v;lbI=i||0;lastFocus=document.activeElement;
   lbTitle.textContent=titleOf(v);
   lbDesc.textContent=v.description||"";
+  $("lbWa").href=wa(isSold(v)?`Bonjour Houssam Motors, je cherche un modèle similaire à ${titleOf(v)}.`:`Bonjour Houssam Motors, je souhaite des informations sur ${titleOf(v)}.`);
   lbShare.dataset.share=v.slug;
   lbLike.dataset.like=v.slug;
   syncLikes();
