@@ -387,7 +387,7 @@ function render(){
   closeMenu();
   const q=searchInput.value.trim().toLowerCase(),cat=categoryFilter.value.toLowerCase(),sort=sortFilter.value;
   const dir=sort==="yearDesc"?-1:sort==="yearAsc"?1:0;
-  const rows=vehicles.filter(v=>(!cat||v.category.toLowerCase()===cat)&&`${v.name} ${v.category} ${v.year||""}`.toLowerCase().includes(q))
+  const rows=[...vehicles].reverse().filter(v=>(!cat||v.category.toLowerCase()===cat)&&`${v.name} ${v.category} ${v.year||""}`.toLowerCase().includes(q))
     .sort((a,b)=>(isSold(a)-isSold(b))||dir*((a.year||0)-(b.year||0)));
   inventory.innerHTML=rows.length?rows.map(card).join(""):
     `<div class="empty">Aucune annonce pour le moment dans cette sélection.<br><a class="btn small" href="${wa("Bonjour Houssam Motors, je cherche : "+(categoryFilter.value||q||"un véhicule")+".")}" target="_blank" rel="noopener">Nous demander sur WhatsApp ↗</a></div>`;
